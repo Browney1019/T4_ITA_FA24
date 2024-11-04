@@ -5,6 +5,11 @@
 package service;
 
 import dao.SettingDAO;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Vector;
 import model.Setting;
@@ -56,6 +61,53 @@ public class SettingService {
     }
     public Vector<Setting> getSetting(String sql){
         return settingDAO.getSetting(sql);
+    }
+    
+    public boolean validateString(String value) {
+        return value != null && !value.trim().isEmpty();
+    }
+
+    // Validation cho số nguyên: kiểm tra xem chuỗi có thể chuyển thành số nguyên hay không
+    public boolean validateInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    // Validation cho đối tượng Setting: kiểm tra đối tượng có null hay không
+    public boolean validateSetting(Setting setting) {
+        return setting != null &&
+               validateString(setting.getName()) &&
+               validateString(setting.getValue()) &&
+               validateInt(String.valueOf(setting.getType())) &&
+               validateInt(String.valueOf(setting.getPriority())) &&
+               validateString(setting.getDescription());
+    }
+
+    // Validation cho LocalDateTime theo định dạng "yyyy-MM-dd HH:mm:ss"
+    public boolean validateLocalDateTime(String input) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            LocalDateTime.parse(input, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    // Validation cho Date theo định dạng "yyyy-MM-dd"
+    public boolean validateDate(String input) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setLenient(false);
+        try {
+            formatter.parse(input);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }
 

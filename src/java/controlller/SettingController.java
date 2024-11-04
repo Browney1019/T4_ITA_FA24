@@ -1,5 +1,5 @@
 
-package controller;
+package controlller;
 
 import dao.SettingDAO;
 import jakarta.servlet.RequestDispatcher;

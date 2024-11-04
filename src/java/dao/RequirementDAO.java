@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import model.Requirement;
-import service.DBContext;
 
 /**
  *
@@ -86,5 +85,123 @@ public class RequirementDAO extends DBContext{
         RequirementDAO a = new RequirementDAO();
         List<Requirement> lst = a.getRequirementList();
         System.out.println(lst.size());
+    }
+    
+    public int insertRequirement(String title, int owner_id, int complexity_id, int status_id, 
+                             String description, LocalDateTime created_at, int created_by_id) {
+    int result = 0;
+    try {
+        String xSql = "INSERT INTO requirement (title, owner_id, complexity_id, status_id, "
+                    + "description, created_at, created_by_id) VALUES (?,?,?,?,?,?,?)";
+        java.sql.PreparedStatement ps = conn.prepareStatement(xSql);
+        ps.setString(1, title);
+        ps.setInt(2, owner_id);
+        ps.setInt(3, complexity_id);
+        ps.setInt(4, status_id);
+        ps.setString(5, description);
+        ps.setObject(6, created_at);
+        ps.setInt(7, created_by_id);
+        ps.executeUpdate();
+        result = 1;
+        db.closeConnection();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+}
+
+    
+    public List<Requirement> getRequirementListByAssignTo(int owner_id) { 
+    List<Requirement> requirements = new ArrayList<>();
+    String xSql = "SELECT * FROM requirement WHERE owner_id = ?";
+
+    try {
+        java.sql.PreparedStatement ps = conn.prepareStatement(xSql);
+        ps.setInt(1, owner_id);
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            int req_id = rs.getInt("req_id");
+            String title = rs.getString("title");
+            int complexity_id = rs.getInt("complexity_id");
+            int status_id = rs.getInt("status_id");
+            String description = rs.getString("description");
+            LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+            int created_by_id = rs.getInt("created_by_id");
+
+            Requirement requirement = new Requirement(req_id, title, owner_id, complexity_id, status_id, description, created_at, created_by_id);
+            requirements.add(requirement);
+        }
+        db.closeConnection();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return requirements;
+}
+
+    
+    public List<Requirement> getRequirementListByStatus(int status_id) {
+    List<Requirement> requirements = new ArrayList<>();
+    String xSql = "SELECT * FROM requirement WHERE status_id = ?";
+
+    try {
+        java.sql.PreparedStatement ps = conn.prepareStatement(xSql);
+        ps.setInt(1, status_id);
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            int req_id = rs.getInt("req_id");
+            String title = rs.getString("title");
+            int owner_id = rs.getInt("owner_id");
+            int complexity_id = rs.getInt("complexity_id");
+            String description = rs.getString("description");
+            LocalDateTime created_at = rs.getTimestamp("created_at").toLocalDateTime();
+            int created_by_id = rs.getInt("created_by_id");
+
+            Requirement requirement = new Requirement(req_id, title, owner_id, complexity_id, status_id, description, created_at, created_by_id);
+            requirements.add(requirement);
+        }
+        db.closeConnection();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return requirements;
+}
+
+    
+    public void updateRequirement(int req_id, String title, int owner_id, 
+            int complexity_id, int status_id, String description, 
+            LocalDateTime updated_at, int updated_by_id) {
+    String xSql = "UPDATE requirement "
+                + "SET title = ?, owner_id = ?, complexity_id = ?, status_id = ?, "
+                + "description = ?, updated_at = ?, updated_by_id = ? "
+                + "WHERE req_id = ?";
+    try {
+        java.sql.PreparedStatement ps = conn.prepareStatement(xSql);
+        ps.setString(1, title);
+        ps.setInt(2, owner_id);
+        ps.setInt(3, complexity_id);
+        ps.setInt(4, status_id);
+        ps.setString(5, description);
+        ps.setObject(6, updated_at);
+        ps.setInt(7, updated_by_id);
+        ps.setInt(8, req_id);
+        ps.executeUpdate();
+        db.closeConnection();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+    public void deleteRequirement(int req_id) {
+    String xSql = "DELETE FROM requirement WHERE req_id = ?";
+    try {
+        java.sql.PreparedStatement ps = conn.prepareStatement(xSql);
+        ps.setInt(1, req_id);
+        ps.executeUpdate();
+        db.closeConnection();
+    } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
 }

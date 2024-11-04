@@ -20,6 +20,6 @@ public class UserService {
     }
 
     public User getUserById(int userId) {
-        return userDAO.getUserById(userId);
+        return userDAO.getUserById1(userId);
     }
 }

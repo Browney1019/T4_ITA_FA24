@@ -21,32 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import model.Setting;
-import service.DBContext;
 
 /**
  *
  * @author DELL
  */
 public class SettingDAO extends DBContext{
-//    public static void main(String[] args) {
-//        SettingDAO dao = new SettingDAO();
-////        int n = dao.addSetting(new Setting("NDemo", "VDemo",1,0,0,));
-//        // int n = dao.insertStaff(new Staff(13, "FDemo", "LDemo",
-//        //         "EDemo2", "PDemo", 1, 2, 7));
-////        int n = dao.updateStaff(new Staff(13,
-////                "FDemo1", "LDemo1",
-////                "EDemo2", "PDemo1", 1, 2, 7));
-////        if (n > 0) {
-////            System.out.println("updated");
-////        }
-//        dao.listAllSettings();
-////      //Vector<Staff> vector=dao.getStaff("select * from staffs");
-////      String fname="la";
-////      Vector<Staff> vector=dao.getStaff("select * from staffs "
-////              + " where first_name like '%"+fname+"%'");
-////      for(Staff staf:vector){
-////          System.out.println(staf);
-//    }
+    public static void main(String[] args) {
+        SettingDAO dao = new SettingDAO();
+        dao.listAllSettings();
+    }
     public Vector<Setting> getSetting(String sql) {
     Vector<Setting> vector = new Vector<>();
     try {

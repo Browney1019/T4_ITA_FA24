@@ -29,6 +29,10 @@ public class IssueService {
     public List<Issue> getIssueList() {
         return issueDAO.getIssueList();
     }
+    
+    public List<Issue> searchIssue(String xSearch) {
+        return issueDAO.searchIssueByTitle(xSearch);
+    }
 
     // Business logic to get issues by assignee
     public List<Issue> getIssueListByAssignee(int assigneeId) {

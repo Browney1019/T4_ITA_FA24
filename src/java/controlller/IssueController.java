@@ -2,19 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
 
-import dao.IssueDAO;
-import dao.RequirementDAO;
+package controlller;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,23 +25,27 @@ import model.Issue;
 import model.Requirement;
 import model.Setting;
 import model.User;
-import service.*;
+import service.AllocationService;
+import service.IssueService;
+import service.ProjectService;
+import service.RequirementService;
+import service.SettingService;
+import service.UserService;
 
 /**
  *
  * @author DELL
  */
 public class IssueController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     private IssueService issueService;
     private RequirementService requirementService;
     private UserService userService;
@@ -59,9 +62,9 @@ public class IssueController extends HttpServlet {
         projectService = new ProjectService();
         settingService = new SettingService();
     }
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ParseException {
+    throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         int xUser_id = 1; // giả định user_id là 1 cho ví dụ này
 
@@ -69,6 +72,9 @@ public class IssueController extends HttpServlet {
 
         if (iService == null || iService.isEmpty()) {
             displayIssueList(request, response);
+
+        } else if (iService.equals("issuesearch")) {
+            searchIssueList(request, response);
 
         } else if (iService.equals("issuedetail")) {
             displayIssueDetail(request, response);
@@ -92,11 +98,33 @@ public class IssueController extends HttpServlet {
             // Xử lý khi `issueservice` không hợp lệ
             response.sendRedirect("error.jsp");
         }
-    }
-
+    } 
+    
     private void displayIssueList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = "/JSP/issueList.jsp";
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
         List<Issue> issues = issueService.getIssueList();
+        request.setAttribute("list", issues);
+        request.getRequestDispatcher(url).forward(request, response);
+    }
+    
+     private void searchIssueList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String url = "/JSP/issueList.jsp";
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
+        String sSearch = request.getParameter("txtSearch");
+        List<Issue> issues = issueService.searchIssue(sSearch);
         request.setAttribute("list", issues);
         request.getRequestDispatcher(url).forward(request, response);
     }
@@ -105,6 +133,13 @@ public class IssueController extends HttpServlet {
         PrintWriter pr = response.getWriter();
         String url = "/JSP/issueDetail.jsp";
         String sIssue_id = request.getParameter("issue_id");
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
 
         if (issueService.validateInt(sIssue_id)) {
             int xIssue_id = Integer.parseInt(sIssue_id);
@@ -128,6 +163,13 @@ public class IssueController extends HttpServlet {
 
     private void displayAddForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = "/JSP/issueAdd.jsp";
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
         List<String> statuses = Arrays.asList("Pending", "To do", "Doing", "Done", "Closed");
         List<Requirement> requirements = requirementService.getRequirementList();
         List<Setting> issueTypes = settingService.getIssueTypeListById(6);
@@ -164,6 +206,14 @@ public class IssueController extends HttpServlet {
         String sProjectId = "1";
         String sCreatedBy = "1";
         String sAssigner = "1";
+        
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
 
         if (issueService.validateString(sTitle) && issueService.validateInt(sStatus)
                 && issueService.validateInt(sType) && issueService.validateDate(sDeadline)
@@ -192,6 +242,13 @@ public class IssueController extends HttpServlet {
 
     private void handleIssueDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String sIssue_id = request.getParameter("issue_id");
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
 
         if (issueService.validateInt(sIssue_id)) {
             int xIssue_id = Integer.parseInt(sIssue_id);
@@ -204,6 +261,13 @@ public class IssueController extends HttpServlet {
 
     private void displayUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = "/JSP/issueUpdate.jsp";
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
         String sIssue_id = request.getParameter("issue_id");
         Issue issue = new Issue();
         if (issueService.validateInt(sIssue_id)) {
@@ -243,6 +307,13 @@ public class IssueController extends HttpServlet {
     }
 
     private void handleIssueUpdate(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+        HttpSession session = request.getSession();
+        User account = (User) session.getAttribute("user");
+//        if(account == null || account.getAccount_id() <= 0){
+//            response.sendRedirect("error.jsp");
+//            return;
+//        }else{
+//        }
         String sTitle = request.getParameter("txtTitle");
         String sStatus = request.getParameter("txtStatus");
         String sType = request.getParameter("txtType");
@@ -290,9 +361,8 @@ public class IssueController extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -300,17 +370,16 @@ public class IssueController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
             Logger.getLogger(IssueController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -318,7 +387,7 @@ public class IssueController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         try {
             processRequest(request, response);
         } catch (ParseException ex) {
@@ -326,9 +395,8 @@ public class IssueController extends HttpServlet {
         }
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

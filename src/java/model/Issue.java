@@ -30,6 +30,25 @@ public class Issue {
 
     public Issue() {
     }
+
+    public Issue(int issue_id, String title, int type_id, Integer req_id, int assigner_id, int assignee_id, Date deadline, int status, LocalDateTime status_date, String description, LocalDateTime created_at, int created_by_id, LocalDateTime updated_at, Integer updated_by_id, int project_id) {
+        this.issue_id = issue_id;
+        this.title = title;
+        this.type_id = type_id;
+        this.req_id = req_id;
+        this.assigner_id = assigner_id;
+        this.assignee_id = assignee_id;
+        this.deadline = deadline;
+        this.status = status;
+        this.status_date = status_date;
+        this.description = description;
+        this.created_at = created_at;
+        this.created_by_id = created_by_id;
+        this.updated_at = updated_at;
+        this.updated_by_id = updated_by_id;
+        this.project_id = project_id;
+    }
+    
     
     public Issue(String title, int assignee_id, Date deadline, int status, LocalDateTime created_at) {
         this.title = title;

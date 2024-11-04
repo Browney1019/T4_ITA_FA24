@@ -9,7 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Date;
-import service.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -48,7 +47,7 @@ public class AllocationDAO extends DBContext {
 //      Vector<Allocation> vector=dao.getAllocation("select * from allocation "
 //              + " where first_name like '%"+fname+"%'");
 //      for(Allocation allocation:vector){
-//          System.out.println(allocation);
+//          System.out.println(allocation); 
     }
 
     public Vector<Allocation> getAllocation(String sql) {

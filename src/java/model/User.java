@@ -4,55 +4,86 @@
  */
 package model;
 
-import java.time.LocalDateTime;
+import java.security.Timestamp;
 
-import java.time.LocalDateTime;
-
-import java.time.LocalDateTime;
-
+/**
+ *
+ * @author Predator
+ */
 public class User {
 
     private int userId;
     private String fullName;
     private String userName;
     private String email;
-    private String mobile;
     private String password;
     private int roleId;
-    private int depId;
-    private LocalDateTime startDate;
-    private int status;
+    private int dep_id;
+    private boolean status;
     private String note;
-    private LocalDateTime createdAt;
     private int createdById;
-    private LocalDateTime updatedAt;
     private int updatedById;
+    private String departmentName;
+    private String roleName; 
+    private int projectCount;
 
     public User() {
+        
     }
-
-    public User(String fullName, String userName, String email, String mobile) {
+    
+    public User(int userId, String fullName, int roleId, int dep_id, boolean status) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.roleId = roleId;
+        this.dep_id = dep_id;
+        this.status = status;
+    }
+    
+        public User(String fullName, String userName, String email, String password ) {
+        this.fullName = fullName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    } 
+    
+    public User(int userId, String fullName, String userName, String email, String password, int roleId, int dep_id, boolean status, String note, int createdById, int updatedById) {
         this.userId = userId;
         this.fullName = fullName;
         this.userName = userName;
         this.email = email;
-        this.mobile = mobile;
         this.password = password;
         this.roleId = roleId;
-        this.depId = depId;
-        this.startDate = startDate;
+        this.dep_id = dep_id;
         this.status = status;
         this.note = note;
         this.createdById = createdById;
         this.updatedById = updatedById;
     }
-    
-    public User(int userId, String fullName, int roleId, int depId, int status) {
+
+    public User(String fullName, String userName, String email, String password, int roleId, int dep_id, boolean status) {
+        this.fullName = fullName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.roleId = roleId;
+        this.dep_id = dep_id;
+        this.status = status;
+    }
+    public User(int userId, String fullName, String userName, String email, String password, int roleId, int dep_id, boolean status, String note, int createdById, int updatedById, String departmentName, String roleName, int projectCount) {
         this.userId = userId;
         this.fullName = fullName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
         this.roleId = roleId;
-        this.depId = depId;
+        this.dep_id = dep_id;
         this.status = status;
+        this.note = note;
+        this.createdById = createdById;
+        this.updatedById = updatedById;
+        this.departmentName = departmentName;
+        this.roleName = roleName;
+        this.projectCount = projectCount;
     }
 
     public int getUserId() {
@@ -87,14 +118,6 @@ public class User {
         this.email = email;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -111,27 +134,11 @@ public class User {
         this.roleId = roleId;
     }
 
-    public int getDepId() {
-        return depId;
-    }
-
-    public void setDepId(int depId) {
-        this.depId = depId;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public int getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -143,28 +150,12 @@ public class User {
         this.note = note;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public int getCreatedById() {
         return createdById;
     }
 
     public void setCreatedById(int createdById) {
         this.createdById = createdById;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public int getUpdatedById() {
@@ -174,4 +165,42 @@ public class User {
     public void setUpdatedById(int updatedById) {
         this.updatedById = updatedById;
     }
+
+    public int getDep_id() {
+        return dep_id;
+    }
+
+    public void setDep_id(int dep_id) {
+        this.dep_id = dep_id;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public int getProjectCount() {
+        return projectCount;
+    }
+
+    public void setProjectCount(int projectCount) {
+        this.projectCount = projectCount;
+    }
+    
+    @Override
+    public String toString() {
+        return "User{" + "userId=" + userId + ", fullName=" + fullName + ", userName=" + userName + ", email=" + email + " password=" + password + ", roleId=" + roleId + ", status=" + status + ", note=" + note + ", createdAt=" + ", createdById=" + createdById + ", updatedAt=" + ", updatedById=" + updatedById + '}';
+    }
+
 }
